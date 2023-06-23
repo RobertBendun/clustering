@@ -1,0 +1,32 @@
+graph_type = { ("graph" | "digraph") }
+
+graph =
+  { graph_type
+  ~ WS+ ~ identifier
+  ~ WS* ~ "{"
+  ~ (WS* ~ (edge|node|assigment))*
+  ~ WS* ~ "}"
+  }
+
+identifier = { (LETTER | ASCII_DIGIT | "_")+ }
+
+node =
+    { identifier
+    ~ WS* ~ metadata?
+    ~ WS* ~ ";"
+    }
+
+arrow = { ("->"|"<-"|"--") }
+
+edge =
+	{ identifier ~ WS+ ~ arrow ~ WS+ ~ identifier
+    ~ WS* ~ metadata?
+    ~ WS* ~ ";"
+    }
+
+assigment = { identifier ~ WS* ~ "=" ~ assigment_content  ~ ";" }
+assigment_content = { (!";" ~ ANY)+ }
+
+metadata = { "[" ~ (!"]" ~ ANY)* ~ "]" }
+
+WS = _{(" "|NEWLINE|"\t")}
